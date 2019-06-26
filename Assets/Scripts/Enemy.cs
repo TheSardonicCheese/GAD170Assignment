@@ -9,10 +9,12 @@ public class Enemy : MonoBehaviour
     private GameObject gameManager;
 
     public Stats myStats;
+
     //enemy 0 = gnoc
     //enemy 1 = raveghouli
     //enemy 2 = peorogre
     public int enemyID = 1;
+
     public enum EnemyTypes
     {
         gnoc,
@@ -23,7 +25,6 @@ public class Enemy : MonoBehaviour
     public EnemyTypes myType;
 
 
-	// Use this for initialization
 	void Start () 
     {
         gameManager = GameObject.FindGameObjectWithTag("GameManager");
