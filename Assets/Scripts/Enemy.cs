@@ -10,11 +10,6 @@ public class Enemy : MonoBehaviour
 
     public Stats myStats;
 
-    //enemy 0 = gnoc
-    //enemy 1 = raveghouli
-    //enemy 2 = peorogre
-    public int enemyID = 1;
-
     public enum EnemyTypes
     {
         gnoc,
@@ -47,19 +42,6 @@ public class Enemy : MonoBehaviour
 
 	}
 	
-
-    public void Attacked(int incDmg, Stats.StatusEffect incEffect)
-    {
-        myStats.satiety -= incDmg - myStats.rawness;
-        myStats.myStatus = incEffect;
-        if (myStats.satiety <= 0)
-            myStats.isDefeated = true;
-    }
-
-    public void AttackTarget(GameObject Target)
-    {
-        Target.GetComponent<Player>().Attacked(myStats.hunger,Stats.StatusEffect.none);
-    }
 
     public void Defeated()
     {

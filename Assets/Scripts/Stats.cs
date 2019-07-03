@@ -32,6 +32,12 @@ public class Stats : MonoBehaviour
     public StatusEffect myStatus;
     public StatusEffect attackEffect;
 
-    //public int health2, speed2, attack2, defense2, luck2
+    public void Attacked(int incDmg, Stats.StatusEffect incEffect)
+    {
+        satiety -= incDmg - (incDmg * (100 / (rawness + 100)));
+        myStatus = incEffect;
+        if (satiety <= 0)
+            isDefeated = true;
+    }
 
 }
