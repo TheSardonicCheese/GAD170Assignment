@@ -35,10 +35,33 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {
-       
-        foreach (GameObject Enemy in GameObject.FindGameObjectsWithTag("Enemy"))
+
+        if (GetComponent<XPandLvlUp>().currentLevel <= 3)
         {
-            EnemyList.Add(Enemy);
+            foreach (GameObject Enemy in GameObject.FindGameObjectsWithTag("Easy"))
+            {
+                EnemyList.Add(Enemy);
+                EnemyList.Add(Enemy);
+            }
+        }
+        if(GetComponent<XPandLvlUp>().currentLevel > 3 && GetComponent<XPandLvlUp>().currentLevel < 7)
+        {
+            foreach (GameObject Enemy in GameObject.FindGameObjectsWithTag("Easy" + "Normal"))
+            {
+                EnemyList.Add(Enemy);
+                EnemyList.Add(Enemy);
+                EnemyList.Add(Enemy);
+            }
+        }
+        if (GetComponent<XPandLvlUp>().currentLevel > 7)
+        {
+            foreach (GameObject Enemy in GameObject.FindGameObjectsWithTag("Easy" + "Normal"))
+            {
+                EnemyList.Add(Enemy);
+                EnemyList.Add(Enemy);
+                EnemyList.Add(Enemy);
+                EnemyList.Add(Enemy);
+            }
         }
 
     }
@@ -72,7 +95,6 @@ public class GameManager : MonoBehaviour
     public void RemoveEnemy(GameObject EnemyToRemove)
     {
         EnemyList.Remove(EnemyToRemove);
-        enemyObj.(EnemyToRemove);
     }
 
     public void SpawnEnemy()
