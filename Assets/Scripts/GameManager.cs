@@ -72,9 +72,15 @@ public class GameManager : MonoBehaviour
     public void SpawnEnemy()
     {
         //Spawning an enemy using the size of the list as the maximum of the random range
-    
+        if (enemiesToFight.Count == 0)
+        {
+            Debug.Log(" All enemies defeated!");
+        }
+        else
+        {
             enemyObj = enemiesToFight[Random.Range(0, enemiesToFight.Count)];
-            Debug.Log(" A" + enemyObj + " appeared! ");        
+            Debug.Log(" A" + enemyObj + " appeared! ");
+        }
           
     }
 
@@ -122,7 +128,7 @@ public class GameManager : MonoBehaviour
             case CombatState.victory:
                 if (enemiesToFight.Count == 0)
                 {
-                    Debug.Log(" All Enemies Defeated!");
+                    Debug.Log(" You win!");
                     break;
                 }
                 else
