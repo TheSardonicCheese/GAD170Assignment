@@ -5,9 +5,11 @@ using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
-    public List<GameObject> EnemyList;
+    public List<GameObject> enemyList;
 
-    public List<GameObject> EnemySpawnList;
+    public List<GameObject> enemiesToFight;
+
+    public int numOfEnemies; 
 
     
     public enum GameState
@@ -36,35 +38,16 @@ public class GameManager : MonoBehaviour
     void Start()
     {
 
-        if (GetComponent<XPandLvlUp>().currentLevel <= 3)
+        for (int i = 0; i < numOfEnemies; i ++)
         {
-            foreach (GameObject Enemy in GameObject.FindGameObjectsWithTag("Easy"))
-            {
-                EnemyList.Add(Enemy);
-                EnemyList.Add(Enemy);
-            }
-        }
-        if(GetComponent<XPandLvlUp>().currentLevel > 3 && GetComponent<XPandLvlUp>().currentLevel < 7)
-        {
-            foreach (GameObject Enemy in GameObject.FindGameObjectsWithTag("Easy" + "Normal"))
-            {
-                EnemyList.Add(Enemy);
-                EnemyList.Add(Enemy);
-                EnemyList.Add(Enemy);
-            }
-        }
-        if (GetComponent<XPandLvlUp>().currentLevel > 7)
-        {
-            foreach (GameObject Enemy in GameObject.FindGameObjectsWithTag("Easy" + "Normal"))
-            {
-                EnemyList.Add(Enemy);
-                EnemyList.Add(Enemy);
-                EnemyList.Add(Enemy);
-                EnemyList.Add(Enemy);
-            }
+            GameObject spawnedEnemy = Instantiate(enemyList[Random.Range(0, enemyList.Count)], transform);
+            enemiesToFight.Add(spawnedEnemy);
         }
 
+        SpawnEnemy();
+        CheckCombatState();
     }
+
 
     void Update()
     {
@@ -76,32 +59,23 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public void DamageEnemies()
-    {
-        foreach (GameObject enemy in EnemyList)
-        {
-            enemy.GetComponent<Stats>().satiety -= 10;
-        }
-    }
-
-    public void HealEnemies()
-    {
-        foreach (GameObject enemy in EnemyList)
-        {
-            enemy.GetComponent<Stats>().satiety += 10;
-        }
-    }
+   
 
     public void RemoveEnemy(GameObject EnemyToRemove)
     {
-        EnemyList.Remove(EnemyToRemove);
+        Debug.Log(" enemy removed");
+        enemiesToFight.Remove(EnemyToRemove);
+        Destroy(EnemyToRemove);
+        
     }
 
     public void SpawnEnemy()
     {
         //Spawning an enemy using the size of the list as the maximum of the random range
-        Instantiate(EnemyList[Random.Range(0, EnemyList.Count)], transform);
-        GameObject enemyObj = EnemyList[Random.Range(0, EnemyList.Count)];
+    
+            enemyObj = enemiesToFight[Random.Range(0, enemiesToFight.Count)];
+            Debug.Log(" A" + enemyObj + " appeared! ");        
+          
     }
 
     public void CheckCombatState()
@@ -116,6 +90,7 @@ public class GameManager : MonoBehaviour
                 //check if enemy is defeated
                 if (enemyObj.GetComponent<Stats>().isDefeated)
                 {
+                    Debug.Log(enemyObj + " defeated!");
                     RemoveEnemy(enemyObj);
                     SpawnEnemy();
                     combatState = CombatState.victory;
@@ -135,8 +110,8 @@ public class GameManager : MonoBehaviour
                 if (playerObj.GetComponent<Stats>().isDefeated)
                 {
                     //go to loss
-                    combatState = CombatState.loss;
                     Debug.Log("Game Over");
+                    combatState = CombatState.loss;
                     break;
                 }
                 combatState = CombatState.playerTurn;
@@ -145,19 +120,24 @@ public class GameManager : MonoBehaviour
 
 
             case CombatState.victory:
-                Debug.Log("Enemy Defeated!");
-                combatState = CombatState.playerTurn;
-                break;
+                if (enemiesToFight.Count == 0)
+                {
+                    Debug.Log(" All Enemies Defeated!");
+                    break;
+                }
+                else
+                {
+                    Debug.Log(" The fight isn't over yet!");
+                    combatState = CombatState.playerTurn;
+                    break;
+                }
+
+
 
             case CombatState.loss:
                 SceneManager.LoadScene("Game Over");
                 break;
 
-               
-               
-
-
-                
         }
 
     }
