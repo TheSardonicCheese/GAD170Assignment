@@ -8,6 +8,7 @@ TagManager:
   - Easy
   - Normal
   - Difficult
+  - BattleManager
   layers:
   - Default
   - TransparentFX

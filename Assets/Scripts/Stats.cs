@@ -12,6 +12,8 @@ public class Stats : MonoBehaviour
     //treated as attack
     public int rawness;
     //treated as defense
+    public int dexterity;
+    //treated as accuracy/evasion
     public int luck;
     //treated as luck
 
@@ -32,10 +34,20 @@ public class Stats : MonoBehaviour
     public StatusEffect myStatus;
     public StatusEffect attackEffect;
 
-    public void Attacked(int incDmg, Stats.StatusEffect incEffect)
+    public void Attacked(int incDmg, Stats.StatusEffect incEffect, int atkrDex, int atkrLuck)
     {
-        satiety -= incDmg - (incDmg * (100 / (rawness + 100)));
-        myStatus = incEffect;
+        //(attacker dex/ defender dex) * attacker luck
+        
+        if (Random.Range(1,100) <= ((atkrDex / dexterity) * atkrLuck ))
+        {
+            satiety -= incDmg - (incDmg * (100 / (rawness + 100)));
+            myStatus = incEffect;
+        }
+        else
+        {
+            Debug.Log(" The attack missed!");
+        }
+
         if (satiety <= 0)
             isDefeated = true;
     }
