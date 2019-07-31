@@ -32,10 +32,6 @@ public class BattleUIManager : MonoBehaviour
         bManager.UpdateHealth += UpdateHealthBar;
     }
 
-    private void Start()
-    {
-        StartCoroutine(DebugLogTest());
-    }
 
     public void UpdateHealthBar(bool isPlayer, float satiety)
     {
