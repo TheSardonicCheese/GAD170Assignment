@@ -42,11 +42,11 @@ public class BattleUIManager : MonoBehaviour
         //we will handle fill amount back in the respective scripts calling this function!
         if (isPlayer)
         {
-            pHealthBarFill.fillAmount = satiety;
+            eHealthBarFill.fillAmount = satiety;
         }
         else
         {
-            eHealthBarFill.fillAmount = satiety;
+            pHealthBarFill.fillAmount = satiety;
         }
     }
 
@@ -86,11 +86,5 @@ public class BattleUIManager : MonoBehaviour
 
     }
 
-    IEnumerator DebugLogTest()
-    {
-        int randomNumber = Random.Range(1, 1000);
-        yield return new WaitForSeconds(3f);
-        UpdateCombatLog("Your random number is: " + randomNumber.ToString());
-    }
 
 }

@@ -210,8 +210,8 @@ public class BattleManager : MonoBehaviour
             (attacker.GetComponent<Stats>().hunger - (attacker.GetComponent<Stats>().hunger * (100 / (defender.GetComponent<Stats>().rawness + 100)))) +
             " damage");
         float percentage = defender.GetComponent<Stats>().satiety / defender.GetComponent<Stats>().maxSatiety;
-        Debug.Log(percentage);
-        UpdateHealth(combatState == CombatState.enemyTurn, percentage);
+        Debug.Log(attacker + " did " + percentage * 100 + " percent damage");
+        UpdateHealth(attacker == playerObj, percentage);
     }
 
     IEnumerator battleGo()
