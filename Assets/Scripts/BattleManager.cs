@@ -9,15 +9,25 @@ public class BattleManager : MonoBehaviour
 
     public List<GameObject> enemiesToFight;
 
-    public int numOfEnemies; 
+    public int numOfEnemies;
 
+    public GameState gameState;
+    public CombatState combatState;
+
+
+    //objects for combat
+    public GameObject playerObj;
+    public GameObject enemyObj;
+    private GameObject gameManager;
+    private GameObject battleUIManager;
+    private bool doBattle = true;
     
+
     public enum GameState
     {
         notInCombat,
         inCombat
     }
-    public GameState gameState;
 
     public enum CombatState
     {
@@ -27,13 +37,16 @@ public class BattleManager : MonoBehaviour
         victory,
         loss
     }
-    public CombatState combatState;
 
-    //objects for combat
-    public GameObject playerObj;
-    public GameObject enemyObj;
+    public event System.Action<bool, float> UpdateHealth;
 
-    private bool doBattle = true;
+    private void Awake()
+    {
+        battleUIManager = GameObject.FindGameObjectWithTag("BattleUIManager");
+        battleUIManager.GetComponent<BattleUIManager>().CallCook += CheckCombatState;
+        battleUIManager.GetComponent<BattleUIManager>().CallSeason += CheckCombatState;
+        battleUIManager.GetComponent<BattleUIManager>().CallSnack += CheckCombatState;
+    }
 
 
     void Start()
@@ -99,7 +112,7 @@ public class BattleManager : MonoBehaviour
         }
         else if (enemyObj = GameObject.FindGameObjectWithTag("Difficult"))
         {
-            playerObj.GetComponent<Player>().GainXPPer();
+            playerObj.GetComponent<Player>().GainXPMon();
             Debug.Log(" gained xp");
         }
     }
@@ -118,9 +131,12 @@ public class BattleManager : MonoBehaviour
                 break;
                             //Player Turn
             case CombatState.playerTurn:
-                //decision - attack
+                //decision - cook, season, snack
+
                 //attack the enemy
                 BattleRound(playerObj, enemyObj);
+                //season enemy
+                //snack
                 //check if enemy is defeated
                 if (enemyObj.GetComponent<Stats>().isDefeated)
                 {
@@ -138,9 +154,11 @@ public class BattleManager : MonoBehaviour
 
                 //Enemy Turn
             case CombatState.enemyTurn:
-                //decision - attack
+                //decision - attack or snack
                 //attack the player
+                
                 BattleRound(enemyObj, playerObj);
+                //snack
                 //check if player is defeated
                 if (playerObj.GetComponent<Stats>().isDefeated)
                 {
@@ -180,7 +198,6 @@ public class BattleManager : MonoBehaviour
 
     public void BattleRound(GameObject attacker, GameObject defender)
     {
-        //need to add miss chance
         defender.GetComponent<Stats>().Attacked(attacker.GetComponent<Stats>().hunger, 
             Stats.StatusEffect.none, 
             attacker.GetComponent<Stats>().dexterity, 
@@ -192,6 +209,9 @@ public class BattleManager : MonoBehaviour
             " for " +
             (attacker.GetComponent<Stats>().hunger - (attacker.GetComponent<Stats>().hunger * (100 / (defender.GetComponent<Stats>().rawness + 100)))) +
             " damage");
+        float percentage = defender.GetComponent<Stats>().satiety / defender.GetComponent<Stats>().maxSatiety;
+        Debug.Log(percentage);
+        UpdateHealth(combatState == CombatState.enemyTurn, percentage);
     }
 
     IEnumerator battleGo()

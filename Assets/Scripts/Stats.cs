@@ -4,7 +4,8 @@ using UnityEngine;
 
 public class Stats : MonoBehaviour
 {
-    public int satiety;
+    public float maxSatiety;
+    public float satiety;
     //treated as health
     public int metabolism;
     //treated as speed
@@ -23,12 +24,15 @@ public class Stats : MonoBehaviour
     {
         none,
         spicy,
-        //like a burned effect, not sure about the rest yet
+        //damage over time
         salty,
+        //reduce rawness
         sweet,
+        //reduces dexterity
         savoury,
+        //reduce hunger
         bitter,
-
+        //reduce luck
     }
 
     public StatusEffect myStatus;

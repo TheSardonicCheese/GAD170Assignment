@@ -14,7 +14,7 @@ public class Enemy : MonoBehaviour
     {
         gnoc,
         raveghouli,
-        peorogre,
+        monsterella,
     }
 
     public EnemyTypes myType;
@@ -34,7 +34,7 @@ public class Enemy : MonoBehaviour
             case EnemyTypes.raveghouli:
                 //do thing
                 break;
-            case EnemyTypes.peorogre:
+            case EnemyTypes.monsterella:
                 //do thing
                 break;
 

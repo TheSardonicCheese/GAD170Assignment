@@ -29,7 +29,8 @@ public class Player : MonoBehaviour
         if (totalXP >= xpRequired)
         {
             currentLevel++;
-            myStats.satiety += 20;
+            myStats.maxSatiety += 20;
+            myStats.satiety = myStats.maxSatiety;
             myStats.metabolism += 10;
             myStats.hunger += 10;
             myStats.rawness += 10;
@@ -49,7 +50,7 @@ public class Player : MonoBehaviour
         totalXP += 5f / (.5f * currentLevel);
         XPandLvlUp();
     }
-    public void GainXPPer()
+    public void GainXPMon()
     {
         totalXP += 10f / (.5f * currentLevel);
         XPandLvlUp();

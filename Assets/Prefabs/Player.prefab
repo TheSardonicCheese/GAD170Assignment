@@ -358,6 +358,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 678ee1b32ff6c134ca8f0f03931b7f64, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  currentLevel: 1
+  totalXP: 0
+  xpRequired: 0
+  xpGained: 0
   myStats: {fileID: 0}
 --- !u!114 &114502451161098858
 MonoBehaviour:
@@ -385,6 +389,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6a88685d8097dc94ca0ac821d9f440d3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  maxSatiety: 100
   satiety: 100
   metabolism: 20
   hunger: 20

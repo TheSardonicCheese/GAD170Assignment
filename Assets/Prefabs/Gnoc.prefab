@@ -97,6 +97,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6a88685d8097dc94ca0ac821d9f440d3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  maxSatiety: 25
   satiety: 25
   metabolism: 100
   hunger: 10
