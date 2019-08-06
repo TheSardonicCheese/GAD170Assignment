@@ -19,6 +19,12 @@ public class Stats : MonoBehaviour
     //treated as luck
 
     public bool isDefeated;
+    public bool isSpicy;
+    public bool isSalty;
+    public bool isSweet;
+    public bool isSavoury;
+    public bool isBitter;
+
 
     public enum StatusEffect
     {
@@ -54,6 +60,33 @@ public class Stats : MonoBehaviour
 
         if (satiety <= 0)
             isDefeated = true;
+    }
+    public void Seasoned(Stats.StatusEffect incEffect)
+    {
+        myStatus = incEffect;
+    }
+    public void SeasoningEffect()
+    {
+        if(isSpicy == true)
+        {
+            satiety -= 20;
+        }
+        if(isSalty == true)
+        {
+            rawness = rawness / 2;
+        }
+        if(isSweet == true)
+        {
+            dexterity = dexterity / 2;
+        }
+        if(isSavoury == true)
+        {
+            hunger = hunger / 2;
+        }
+        if(isBitter == true)
+        {
+            luck = luck / 2;
+        }
     }
 
 }

@@ -392,11 +392,16 @@ MonoBehaviour:
   maxSatiety: 100
   satiety: 100
   metabolism: 20
-  hunger: 20
+  hunger: 10
   rawness: 20
   dexterity: 50
   luck: 30
   isDefeated: 0
+  isSpicy: 0
+  isSalty: 0
+  isSweet: 0
+  isSavoury: 0
+  isBitter: 0
   myStatus: 0
   attackEffect: 0
 --- !u!114 &114734874863558586

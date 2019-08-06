@@ -5,9 +5,7 @@ using UnityEngine.SceneManagement;
 
 public class BattleManager : MonoBehaviour
 {
-    public List<GameObject> enemyList;
-
-    public List<GameObject> enemiesToFight;
+    public List<GameObject> enemySpawnList;
 
     public int numOfEnemies;
 
@@ -20,7 +18,9 @@ public class BattleManager : MonoBehaviour
     public GameObject enemyObj;
     private GameObject gameManager;
     private GameObject battleUIManager;
+    public GameObject grassType;
     private bool doBattle = true;
+    
     
 
     public enum GameState
@@ -51,15 +51,15 @@ public class BattleManager : MonoBehaviour
 
     void Start()
     {
+        gameManager = GameObject.FindGameObjectWithTag("GameManager");
 
-        for (int i = 0; i < numOfEnemies; i ++)
+        foreach(GameObject tempEnemy in gameManager.GetComponent<GameManager>().enemiesToFight)
         {
-            GameObject spawnedEnemy = Instantiate(enemyList[Random.Range(0, enemyList.Count)], transform);
-            enemiesToFight.Add(spawnedEnemy);
+            enemySpawnList.Add(tempEnemy);
         }
+        gameManager.GetComponent<GameManager>().enemiesToFight.Clear();
 
         SpawnEnemy();
-        CheckCombatState();
     }
 
 
@@ -78,22 +78,22 @@ public class BattleManager : MonoBehaviour
     public void RemoveEnemy(GameObject EnemyToRemove)
     {
         Debug.Log(" enemy removed");
-        enemiesToFight.Remove(EnemyToRemove);
         Destroy(EnemyToRemove);
+        enemySpawnList.RemoveAt(0);
         
     }
 
     public void SpawnEnemy()
     {
         //Spawning an enemy using the size of the list as the maximum of the random range
-        if (enemiesToFight.Count == 0)
+        if (enemySpawnList.Count == 0)
         {
             Debug.Log(" All enemies defeated!");
         }
         else
         {
-            enemyObj = enemiesToFight[Random.Range(0, enemiesToFight.Count)];
-            Debug.Log(" A" + enemyObj + " appeared! ");
+            Transform EnemySpawnLoc = GameObject.FindGameObjectWithTag("EnemySpawnLoc").transform;
+            enemyObj = Instantiate(enemySpawnList[0], EnemySpawnLoc);
         }
           
     }
@@ -136,7 +136,9 @@ public class BattleManager : MonoBehaviour
                 //attack the enemy
                 BattleRound(playerObj, enemyObj);
                 //season enemy
+
                 //snack
+                BattleRoundHeal(playerObj);
                 //check if enemy is defeated
                 if (enemyObj.GetComponent<Stats>().isDefeated)
                 {
@@ -173,7 +175,7 @@ public class BattleManager : MonoBehaviour
 
 
             case CombatState.victory:
-                if (enemiesToFight.Count == 0)
+                if (enemySpawnList.Count == 0)
                 {
                     Debug.Log(" You win!");
                     SceneManager.LoadScene("OverWorld");
@@ -212,6 +214,27 @@ public class BattleManager : MonoBehaviour
         float percentage = defender.GetComponent<Stats>().satiety / defender.GetComponent<Stats>().maxSatiety;
         Debug.Log(attacker + " did " + percentage * 100 + " percent damage");
         UpdateHealth(attacker == playerObj, percentage);
+    }
+    public void BattleRoundSeason(GameObject attacker, GameObject defender)
+    {
+        defender.GetComponent<Stats>().Seasoned(attacker.GetComponent<Stats>().attackEffect);
+    }
+    public void BattleRoundHeal(GameObject attacker)
+    {
+        grassType = GameObject.FindGameObjectWithTag("GrassType");
+        if (grassType.GetComponent<TallGrass>().isSpaghetti == true)
+        {
+            attacker.GetComponent<Stats>().satiety += 20;
+        }
+        else if(GetComponent<TallGrass>().isBroccoli ==true)
+        {
+            attacker.GetComponent<Stats>().satiety += 50;
+        }
+        else if (GetComponent<TallGrass>().isStew == true)
+        {
+            attacker.GetComponent<Stats>().satiety += 100;
+        }
+        Debug.Log("Player healed!");
     }
 
     IEnumerator battleGo()

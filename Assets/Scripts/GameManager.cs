@@ -5,6 +5,10 @@ using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
+    public List<GameObject> enemyList;
+
+    public List<GameObject> enemiesToFight;
+
     public enum Worlds
     {
         OverWorld,
@@ -15,6 +19,14 @@ public class GameManager : MonoBehaviour
     {
         //this will make it so we can travel between scenes (good for keeping track of gameplay!)
         DontDestroyOnLoad(this.gameObject);
+    }
+
+    void GenerateEnemies()
+    {
+        for (int i = 0; i < 3; i++)
+        {
+            enemiesToFight.Add(enemyList[Random.Range(0, enemyList.Count)]);
+        }
     }
 
     public void TravelToWorld(Worlds destination)

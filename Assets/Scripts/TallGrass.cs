@@ -2,11 +2,14 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class WheatField : MonoBehaviour
+public class TallGrass : MonoBehaviour
 {
     private GameObject gameManager;
 
     public bool isInField;
+    public bool isSpaghetti;
+    public bool isBroccoli;
+    public bool isStew;
 
 
 

@@ -10,6 +10,8 @@ TagManager:
   - Difficult
   - BattleManager
   - BattleUIManager
+  - EnemySpawnLoc
+  - GrassType
   layers:
   - Default
   - TransparentFX
