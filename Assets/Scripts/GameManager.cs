@@ -17,6 +17,7 @@ public class GameManager : MonoBehaviour
     //void awke is called before void start on ANY  OBJECT
     private void Awake()
     {
+        
         //this will make it so we can travel between scenes (good for keeping track of gameplay!)
         DontDestroyOnLoad(this.gameObject);
     }
@@ -40,9 +41,18 @@ public class GameManager : MonoBehaviour
 
             case Worlds.BattleStage:
                 //go to battle scence
+                GenerateEnemies();
                 SceneManager.LoadScene("BattleStage");
                 break;
         }
     }
 
+    void GenerateEnemies()
+    {
+        for (int i = 0; i < 3; i ++)
+        {
+            enemiesToFight.Add(enemySpawnList[Random.Range(0, enemySpawnList.Count)]);
+        }
+    }
+    
 }

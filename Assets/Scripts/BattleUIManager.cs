@@ -6,7 +6,7 @@ using UnityEngine.UI;
 public class BattleUIManager : MonoBehaviour
 {
 
-    private Button cookButton;
+    public Button cookButton;
     private Button seasonButton;
     private Button snackButton;
 
@@ -81,6 +81,4 @@ public class BattleUIManager : MonoBehaviour
         }
 
     }
-
-
 }

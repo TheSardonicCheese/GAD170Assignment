@@ -38,7 +38,15 @@ public class BattleManager : MonoBehaviour
         loss
     }
 
+    public enum Decision
+    {
+        cook,
+        season,
+        snack
+    }
+
     public event System.Action<bool, float> UpdateHealth;
+    public event System.Action UpdateDecision;
 
     private void Awake()
     {
@@ -61,22 +69,12 @@ public class BattleManager : MonoBehaviour
 
         SpawnEnemy();
     }
-
-
-    void Update()
-    {
-        if (doBattle)
-        {
-            //set turn order
-            StartCoroutine(battleGo());
-            doBattle = false;
-        }
-    }
-
-   
+    
 
     public void RemoveEnemy(GameObject EnemyToRemove)
     {
+        GameObject.Destroy(EnemyToRemove);
+        enemySpawnList.RemoveAt(0);
         Debug.Log(" enemy removed");
         Destroy(EnemyToRemove);
         enemySpawnList.RemoveAt(0);
@@ -88,7 +86,7 @@ public class BattleManager : MonoBehaviour
         //Spawning an enemy using the size of the list as the maximum of the random range
         if (enemySpawnList.Count == 0)
         {
-            Debug.Log(" All enemies defeated!");
+            enemySpawnList.Add(tempEnemy);
         }
         else
         {
@@ -134,7 +132,7 @@ public class BattleManager : MonoBehaviour
                 //decision - cook, season, snack
 
                 //attack the enemy
-                BattleRound(playerObj, enemyObj);
+                BattleRoundCook(playerObj, enemyObj);
                 //season enemy
 
                 //snack
@@ -159,7 +157,7 @@ public class BattleManager : MonoBehaviour
                 //decision - attack or snack
                 //attack the player
                 
-                BattleRound(enemyObj, playerObj);
+                BattleRoundCook(enemyObj, playerObj);
                 //snack
                 //check if player is defeated
                 if (playerObj.GetComponent<Stats>().isDefeated)
@@ -198,22 +196,24 @@ public class BattleManager : MonoBehaviour
 
     }
 
-    public void BattleRound(GameObject attacker, GameObject defender)
+    public void BattleRoundCook(GameObject attacker, GameObject defender)
     {
-        defender.GetComponent<Stats>().Attacked(attacker.GetComponent<Stats>().hunger, 
-            Stats.StatusEffect.none, 
-            attacker.GetComponent<Stats>().dexterity, 
+        
+            defender.GetComponent<Stats>().Attacked(attacker.GetComponent<Stats>().hunger,
+            Stats.StatusEffect.none,
+            attacker.GetComponent<Stats>().dexterity,
             attacker.GetComponent<Stats>().luck);
 
-        Debug.Log(attacker.name +
-            " attacks " +
-            defender.name +
-            " for " +
-            (attacker.GetComponent<Stats>().hunger - (attacker.GetComponent<Stats>().hunger * (100 / (defender.GetComponent<Stats>().rawness + 100)))) +
-            " damage");
-        float percentage = defender.GetComponent<Stats>().satiety / defender.GetComponent<Stats>().maxSatiety;
-        Debug.Log(attacker + " did " + percentage * 100 + " percent damage");
-        UpdateHealth(attacker == playerObj, percentage);
+            Debug.Log(attacker.name +
+                " attacks " +
+                defender.name +
+                " for " +
+                (attacker.GetComponent<Stats>().hunger - (attacker.GetComponent<Stats>().hunger * (100 / (defender.GetComponent<Stats>().rawness + 100)))) +
+                " damage");
+            float percentage = defender.GetComponent<Stats>().satiety / defender.GetComponent<Stats>().maxSatiety;
+            Debug.Log(attacker + " did " + percentage * 100 + " percent damage");
+            UpdateHealth(attacker == playerObj, percentage);
+     
     }
     public void BattleRoundSeason(GameObject attacker, GameObject defender)
     {
@@ -237,11 +237,19 @@ public class BattleManager : MonoBehaviour
         Debug.Log("Player healed!");
     }
 
-    IEnumerator battleGo()
+    public void BattleRoundSnack (GameObject attacker)
     {
-        CheckCombatState();
-        yield return new WaitForSeconds(1f);
+        //determine what field the player is in
+        //increase health accordingly
+    }
+
+    IEnumerator StartBattle()
+    {
+        yield return new WaitForSeconds(5f);
+
         doBattle = true;
     }
+
+
 
 }
