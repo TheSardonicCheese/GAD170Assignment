@@ -19,7 +19,7 @@ public class BattleManager : MonoBehaviour
     private GameObject gameManager;
     private GameObject battleUIManager;
     public GameObject grassType;
-
+    private bool doBattle = true;
     
     
 
@@ -44,7 +44,6 @@ public class BattleManager : MonoBehaviour
         season,
         snack
     }
-    public Decision currentDecision;
 
     public event System.Action<bool, float> UpdateHealth;
     public event System.Action UpdateDecision;
@@ -52,9 +51,9 @@ public class BattleManager : MonoBehaviour
     private void Awake()
     {
         battleUIManager = GameObject.FindGameObjectWithTag("BattleUIManager");
-        battleUIManager.GetComponent<BattleUIManager>().CallCook += CookCombat;
-        battleUIManager.GetComponent<BattleUIManager>().CallSeason += SeasonCombat;
-        battleUIManager.GetComponent<BattleUIManager>().CallSnack += SnackCombat;
+        battleUIManager.GetComponent<BattleUIManager>().CallCook += CheckCombatState;
+        battleUIManager.GetComponent<BattleUIManager>().CallSeason += CheckCombatState;
+        battleUIManager.GetComponent<BattleUIManager>().CallSnack += CheckCombatState;
     }
 
 
@@ -87,7 +86,7 @@ public class BattleManager : MonoBehaviour
         //Spawning an enemy using the size of the list as the maximum of the random range
         if (enemySpawnList.Count == 0)
         {
-            Debug.Log(" All enemies defeated!");
+            enemySpawnList.Add(tempEnemy);
         }
         else
         {
@@ -97,37 +96,21 @@ public class BattleManager : MonoBehaviour
           
     }
 
-    void CookCombat()
-    {
-        currentDecision = Decision.cook;
-        CheckCombatState();
-    }
-    void SeasonCombat()
-    {
-        currentDecision = Decision.season;
-        CheckCombatState();
-    }
-    void SnackCombat()
-    {
-        currentDecision = Decision.snack;
-        CheckCombatState();
-    }
-
     public void GiveXP()
     {
         if (enemyObj = GameObject.FindGameObjectWithTag("Easy"))
         {
-            playerObj.GetComponent<Stats>().GainXPGnoc();
+            playerObj.GetComponent<Player>().GainXPGnoc();
             Debug.Log(" gained xp");
         }
         else if (enemyObj = GameObject.FindGameObjectWithTag("Normal"))
         {
-            playerObj.GetComponent<Stats>().GainXPRav();
+            playerObj.GetComponent<Player>().GainXPRav();
             Debug.Log(" gained xp");
         }
         else if (enemyObj = GameObject.FindGameObjectWithTag("Difficult"))
         {
-            playerObj.GetComponent<Stats>().GainXPMon();
+            playerObj.GetComponent<Player>().GainXPMon();
             Debug.Log(" gained xp");
         }
     }
@@ -147,19 +130,6 @@ public class BattleManager : MonoBehaviour
                             //Player Turn
             case CombatState.playerTurn:
                 //decision - cook, season, snack
-                switch (currentDecision)
-                {
-                    case Decision.cook:
-                        BattleRoundCook(playerObj, enemyObj);
-                        break;
-                    case Decision.season:
-                        BattleRoundSeason(playerObj, enemyObj);
-                        break;
-                    case Decision.snack:
-                        BattleRoundSnack(playerObj);
-                        break;
-                }
-                   
 
                 //attack the enemy
                 BattleRoundCook(playerObj, enemyObj);
@@ -179,7 +149,6 @@ public class BattleManager : MonoBehaviour
                 }
                 //next case, usually enemy turn
                 combatState = CombatState.enemyTurn;
-                
                 break;
 
 
@@ -187,7 +156,7 @@ public class BattleManager : MonoBehaviour
             case CombatState.enemyTurn:
                 //decision - attack or snack
                 //attack the player
-                StartCoroutine(StartBattle());
+                
                 BattleRoundCook(enemyObj, playerObj);
                 //snack
                 //check if player is defeated
@@ -252,7 +221,6 @@ public class BattleManager : MonoBehaviour
     }
     public void BattleRoundHeal(GameObject attacker)
     {
-        /*
         grassType = GameObject.FindGameObjectWithTag("GrassType");
         if (grassType.GetComponent<TallGrass>().isSpaghetti == true)
         {
@@ -265,7 +233,7 @@ public class BattleManager : MonoBehaviour
         else if (GetComponent<TallGrass>().isStew == true)
         {
             attacker.GetComponent<Stats>().satiety += 100;
-        }*/
+        }
         Debug.Log("Player healed!");
     }
 
@@ -277,9 +245,9 @@ public class BattleManager : MonoBehaviour
 
     IEnumerator StartBattle()
     {
-        yield return new WaitForSeconds(3f);
+        yield return new WaitForSeconds(5f);
 
-        CheckCombatState();
+        doBattle = true;
     }
 
 

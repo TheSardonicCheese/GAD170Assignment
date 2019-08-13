@@ -23,10 +23,8 @@ public class PlayerController : MonoBehaviour
 	{
 		if(controller.isGrounded)
 		{
-            moveDirection = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
-
-
-            moveDirection *= speed;
+			moveDirection = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
+			moveDirection *= speed;
 
 			if(Input.GetButton("Jump"))
 			{
